@@ -56,8 +56,8 @@ async def error(query: CallbackQuery) -> None:
 
 async def buttons_handler(update: Update, context: ContextTypes.DEFAULT_TYPE) -> None:
     FUNCTIONS: Dict[str, Callable[[CallbackQuery, Optional[str]], Coroutine[Any, Any, None]]] = {
-        "random_card_menu": ...,
-    } # type: ignore
+        "random_card_menu": ...,  # type: ignore
+    }  # type: ignore
     chat = update.effective_chat
     await context.bot.send_chat_action(chat_id=chat.id, action="typing")
     query = update.callback_query
