@@ -5,7 +5,6 @@ from dotenv import load_dotenv
 from logger import LOGGER, logger_init
 from telegram import CallbackQuery, InlineKeyboardButton, InlineKeyboardMarkup, Update
 from telegram.ext import Application, CallbackQueryHandler, CommandHandler, ContextTypes
-from utils import update_message
 
 load_dotenv()
 
@@ -52,13 +51,13 @@ async def error(query: CallbackQuery) -> None:
     LOGGER.info(f"У пользователя {query.from_user.username} произошла ошибка, query: {query.data}")
     LOGGER.debug(f"query: {query.data}")
     LOGGER.debug(f"buttons: {buttons}")
-    await update_message(query, buttons, "Что-то пошло не так, начнём с начала?")
+    await query.edit_message_text(text="Что-то пошло не так, начнём с начала?", reply_markup=buttons)
 
 
 async def buttons_handler(update: Update, context: ContextTypes.DEFAULT_TYPE) -> None:
     FUNCTIONS: Dict[str, Callable[[CallbackQuery, Optional[str]], Coroutine[Any, Any, None]]] = {
         "random_card_menu": ...,
-    }
+    } # type: ignore
     chat = update.effective_chat
     await context.bot.send_chat_action(chat_id=chat.id, action="typing")
     query = update.callback_query
