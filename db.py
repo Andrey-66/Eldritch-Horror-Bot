@@ -1,30 +1,31 @@
 import os
 
-from sqlalchemy import create_engine, Column, Integer, Boolean
-from sqlalchemy.orm import declarative_base, Session
+from sqlalchemy import Boolean, Column, create_engine
+from sqlalchemy.orm import Session, declarative_base, DeclarativeBase
 
-DATABASE_URL = (f"postgresql://{os.getenv('POSTGRES_USER')}:"
-                f"{os.getenv('POSTGRES_PASSWORD')}"
-                f"@{os.getenv('DB_HOST')}:"
-                f"{os.getenv('DB_PORT')}/"
-                f"{os.getenv('POSTGRES_DB')}")
-Base = declarative_base()
+DATABASE_URL = (
+    f"postgresql://{os.getenv('POSTGRES_USER')}:"
+    f"{os.getenv('POSTGRES_PASSWORD')}"
+    f"@{os.getenv('DB_HOST')}:"
+    f"{os.getenv('DB_PORT')}/"
+    f"{os.getenv('POSTGRES_DB')}"
+)
+
+Base: DeclarativeBase = declarative_base()
 engine = create_engine(DATABASE_URL)
 
 
 class Users(Base):
-    __tablename__ = 'users'
+    __tablename__ = "users"
 
-    id = Column(Integer, primary_key=True)
-    user_id = Column(Integer)
-    expansion_forsaken_lore=Column(Boolean, default=False)
-    expansion_mountains_of_madness=Column(Boolean, default=False)
-    expansion_strange_remnants=Column(Boolean, default=False)
-    expansion_under_the_pyramids=Column(Boolean, default=False)
-    expansion_signs_of_carcosa=Column(Boolean, default=False)
-    expansion_the_dreamlands=Column(Boolean, default=False)
-    expansion_cities_in_ruin=Column(Boolean, default=False)
-    expansion_masks_of_nyarlathotep=Column(Boolean, default=False)
+    expansion_forsaken_lore = Column(Boolean, default=False)
+    expansion_mountains_of_madness = Column(Boolean, default=False)
+    expansion_strange_remnants = Column(Boolean, default=False)
+    expansion_under_the_pyramids = Column(Boolean, default=False)
+    expansion_signs_of_carcosa = Column(Boolean, default=False)
+    expansion_the_dreamlands = Column(Boolean, default=False)
+    expansion_cities_in_ruin = Column(Boolean, default=False)
+    expansion_masks_of_nyarlathotep = Column(Boolean, default=False)
 
     def __str__(self):
         return self.id
@@ -38,11 +39,13 @@ def check_user_exists(user_id):
         return True
     return False
 
+
 def get_id_by_user_id(user_id):
     session = Session(engine)
     result = session.query(Users.id).filter_by(user_id=user_id).first()
     session.close()
     return result.id if result else None
+
 
 def change_expansion(user_id, expansion):
     session = Session(engine)
@@ -65,6 +68,7 @@ def change_expansion(user_id, expansion):
         user.expansion_masks_of_nyarlathotep = not user.expansion_masks_of_nyarlathotep
     session.commit()
     session.close()
+
 
 def check_expansion(user_id, expansion):
     session = Session(engine)
@@ -122,11 +126,13 @@ def get_all_users():
         return result
     return []
 
+
 def delete_user(user_id):
     session = Session(engine)
     session.query(Users).filter_by(user_id=user_id).delete()
     session.commit()
     session.close()
+
 
 def get_all_data():
     session = Session(engine)

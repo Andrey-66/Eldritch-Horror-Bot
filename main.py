@@ -2,13 +2,13 @@ import os
 from typing import Any, Callable, Coroutine, Dict, Optional
 
 from dotenv import load_dotenv
+from telegram import CallbackQuery, Update
+from telegram.ext import (Application, CallbackQueryHandler, CommandHandler,
+                          ContextTypes)
 
-from db import get_all_users, change_expansion
+from db import change_expansion, get_all_users
 from expansions_menu import create_expansions_buttons
 from logger import LOGGER, logger_init
-from telegram import CallbackQuery, Update
-from telegram.ext import Application, CallbackQueryHandler, CommandHandler, ContextTypes
-
 from utils import add_new_users, get_menu_buttons
 
 load_dotenv()
@@ -32,7 +32,7 @@ async def expansions_settings_menu(query: CallbackQuery) -> None:
     buttons = create_expansions_buttons(query.from_user.id)
     text = "Выбери дополнения"
     if query.message.text == text:
-        text+=" "
+        text += " "
     await query.edit_message_text("Выбери дополнения", reply_markup=buttons)
 
 
@@ -43,17 +43,18 @@ async def menu(query: CallbackQuery) -> None:
 
 
 async def random_card_menu(query: CallbackQuery) -> None:
-    text = ' '.join(str(user_id) for user_id in get_all_users())
+    text = " ".join(str(user_id) for user_id in get_all_users())
     if text == "":
         text = "Нет пользователей"
     await query.edit_message_text(text=text)
 
+
 async def buttons_handler(update: Update, context: ContextTypes.DEFAULT_TYPE) -> None:
-    FUNCTIONS: Dict[str, Callable[[CallbackQuery, Optional[str]], Coroutine[Any, Any, None]]] = {
+    FUNCTIONS: Dict[str, Callable[[CallbackQuery], Coroutine[Any, Any, None]]] = {
         "menu": menu,
         "random_card_menu": random_card_menu,
         "expansions_settings_menu": expansions_settings_menu,
-    }  # type: ignore
+    }
     chat = update.effective_chat
     add_new_users(chat.id)
     await context.bot.send_chat_action(chat_id=chat.id, action="typing")

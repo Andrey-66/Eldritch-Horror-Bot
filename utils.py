@@ -1,4 +1,4 @@
-from telegram import InlineKeyboardMarkup, InlineKeyboardButton
+from telegram import InlineKeyboardButton, InlineKeyboardMarkup
 
 from db import check_user_exists, create_user
 
@@ -6,6 +6,7 @@ from db import check_user_exists, create_user
 def add_new_users(user_id):
     if not check_user_exists(user_id):
         create_user(user_id)
+
 
 def get_menu_buttons():
     buttons = InlineKeyboardMarkup(
