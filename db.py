@@ -1,7 +1,7 @@
 import os
 
-from sqlalchemy import Boolean, Column, create_engine
-from sqlalchemy.orm import Session, declarative_base, DeclarativeBase
+from sqlalchemy import Boolean, Column, Integer, create_engine
+from sqlalchemy.orm import DeclarativeBase, Session, declarative_base
 
 DATABASE_URL = (
     f"postgresql://{os.getenv('POSTGRES_USER')}:"
@@ -18,6 +18,8 @@ engine = create_engine(DATABASE_URL)
 class Users(Base):
     __tablename__ = "users"
 
+    id = Column(Integer, primary_key=True)
+    user_id = Column(Integer, unique=True)
     expansion_forsaken_lore = Column(Boolean, default=False)
     expansion_mountains_of_madness = Column(Boolean, default=False)
     expansion_strange_remnants = Column(Boolean, default=False)
@@ -26,6 +28,17 @@ class Users(Base):
     expansion_the_dreamlands = Column(Boolean, default=False)
     expansion_cities_in_ruin = Column(Boolean, default=False)
     expansion_masks_of_nyarlathotep = Column(Boolean, default=False)
+
+    def __init__(self, user_id):
+        self.user_id = user_id
+        self.expansion_forsaken_lore = False
+        self.expansion_mountains_of_madness = False
+        self.expansion_strange_remnants = False
+        self.expansion_under_the_pyramids = False
+        self.expansion_signs_of_carcosa = False
+        self.expansion_the_dreamlands = False
+        self.expansion_cities_in_ruin = False
+        self.expansion_masks_of_nyarlathotep = False
 
     def __str__(self):
         return self.id

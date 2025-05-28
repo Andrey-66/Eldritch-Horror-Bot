@@ -1,14 +1,12 @@
 import os
-from typing import Any, Callable, Coroutine, Dict, Optional
-
-from dotenv import load_dotenv
-from telegram import CallbackQuery, Update
-from telegram.ext import (Application, CallbackQueryHandler, CommandHandler,
-                          ContextTypes)
+from typing import Any, Callable, Coroutine, Dict
 
 from db import change_expansion, get_all_users
+from dotenv import load_dotenv
 from expansions_menu import create_expansions_buttons
 from logger import LOGGER, logger_init
+from telegram import CallbackQuery, Update
+from telegram.ext import Application, CallbackQueryHandler, CommandHandler, ContextTypes
 from utils import add_new_users, get_menu_buttons
 
 load_dotenv()

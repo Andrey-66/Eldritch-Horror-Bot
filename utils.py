@@ -1,6 +1,5 @@
-from telegram import InlineKeyboardButton, InlineKeyboardMarkup
-
 from db import check_user_exists, create_user
+from telegram import InlineKeyboardButton, InlineKeyboardMarkup
 
 
 def add_new_users(user_id):

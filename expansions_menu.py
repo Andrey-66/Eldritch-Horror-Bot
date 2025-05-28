@@ -1,11 +1,16 @@
-from telegram import InlineKeyboardButton, InlineKeyboardMarkup
-
-from constants import (NAME_CITIES_IN_RUIN, NAME_FORSAKEN_LORE,
-                       NAME_MASKS_OF_NYARLATHOTEP, NAME_MOUNTAINS_OF_MADNESS,
-                       NAME_SIGNS_OF_CARCOSA, NAME_STRANGE_REMNANTS,
-                       NAME_THE_DREAMLANDS, NAME_UNDER_THE_PYRAMIDS)
+from constants import (
+    NAME_CITIES_IN_RUIN,
+    NAME_FORSAKEN_LORE,
+    NAME_MASKS_OF_NYARLATHOTEP,
+    NAME_MOUNTAINS_OF_MADNESS,
+    NAME_SIGNS_OF_CARCOSA,
+    NAME_STRANGE_REMNANTS,
+    NAME_THE_DREAMLANDS,
+    NAME_UNDER_THE_PYRAMIDS,
+)
 from db import check_expansion
 from logger import LOGGER
+from telegram import InlineKeyboardButton, InlineKeyboardMarkup
 
 
 def create_expansions_buttons(user_id):
