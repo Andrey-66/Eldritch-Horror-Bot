@@ -1,6 +1,7 @@
 import os
+from math import ceil
 
-from sqlalchemy import Boolean, Column, Integer, create_engine
+from sqlalchemy import JSON, Boolean, Column, DateTime, Integer, String, create_engine
 from sqlalchemy.orm import DeclarativeBase, Session, declarative_base
 
 DATABASE_URL = (
@@ -42,6 +43,100 @@ class Users(Base):
 
     def __str__(self):
         return self.id
+
+
+class GameHistory(Base):
+    __tablename__ = "game_history"
+
+    id = Column(Integer, primary_key=True)
+    date = Column(DateTime)
+    duration = Column(Integer)
+    victory = Column(Boolean)
+    ancient_id = Column(Integer)
+    prologue_id = Column(Integer, nullable=True)
+    rumors_id = Column(Integer, nullable=True)
+    player_count = Column(Integer)
+    investigators = Column(JSON)
+    mysteries_solved = Column(Integer, nullable=True)
+    gates_in_game = Column(Integer, nullable=True)
+    monsters_in_game = Column(Integer, nullable=True)
+    cules_in_game = Column(Integer, nullable=True)
+    curses_in_game = Column(Integer, nullable=True)
+    blessings_in_game = Column(Integer, nullable=True)
+    rumors_in_game = Column(Integer, nullable=True)
+    despair_level = Column(Integer)
+    defeat_reason_id = Column(Integer, nullable=True)
+    score = Column(Integer, nullable=True)
+    comment = Column(String, nullable=True)
+    photos = Column(JSON, nullable=True)
+
+    def __init__(
+        self,
+        date,
+        duration,
+        victory,
+        ancient_id,
+        player_count,
+        investigators,
+        despair_level,
+        prologue_id,
+        rumors_id,
+        mysteries_solved,
+        gates_in_game,
+        monsters_in_game,
+        cules_in_game,
+        curses_in_game,
+        blessings_in_game,
+        rumors_in_game,
+        defeat_reason_id,
+        comment,
+        photos,
+    ):
+        self.date = date
+        self.duration = duration
+        self.victory = victory
+        self.ancient_id = ancient_id
+        if prologue_id:
+            self.prologue_id = prologue_id
+        if rumors_id:
+            self.rumors_id = rumors_id
+        self.player_count = player_count
+        self.investigators = investigators
+        self.mysteries_solved = mysteries_solved
+        if victory:
+            if not gates_in_game:
+                raise ValueError("gates_in_game is required for victory")
+            self.gates_in_game = self.gates_in_game
+            if not monsters_in_game:
+                raise ValueError("monsters_in_game is required for victory")
+            self.monsters_in_game = self.monsters_in_game
+            if not curses_in_game:
+                raise ValueError("curses_in_game is required for victory")
+            self.curses_in_game = self.curses_in_game
+            if not blessings_in_game:
+                raise ValueError("blessings_in_game is required for victory")
+            self.blessings_in_game = self.blessings_in_game
+            if not rumors_in_game:
+                raise ValueError("rumors_in_game is required for victory")
+            self.rumors_in_game = self.rumors_in_game
+            if not despair_level:
+                raise ValueError("despair_level is required for victory")
+            self.despair_level = despair_level
+            score = 0
+            score += gates_in_game
+            score += ceil(monsters_in_game / 3)
+            score += curses_in_game
+            score += rumors_id * 3
+            score -= ceil(cules_in_game / 3)
+            score -= blessings_in_game
+            score -= despair_level
+            self.score = score
+        else:
+            if not defeat_reason_id:
+                raise ValueError("defeat_reason_id is required for defeat")
+            self.defeat_reason_id = defeat_reason_id
+        self.comment = comment
+        self.photos = photos
 
 
 Base.metadata.create_all(engine)
@@ -152,3 +247,52 @@ def get_all_data():
     result = session.query(Users).all()
     session.close()
     return result
+
+
+def create_game(
+    date,
+    duration,
+    victory,
+    ancient_id,
+    player_count,
+    investigators,
+    despair_level,
+    prologue_id=None,
+    rumors_id=None,
+    mysteries_solved=None,
+    gates_in_game=None,
+    monsters_in_game=None,
+    cules_in_game=None,
+    curses_in_game=None,
+    blessings_in_game=None,
+    rumors_in_game=None,
+    defeat_reason_id=None,
+    comment=None,
+    photos=None,
+):
+    session = Session(engine)
+    game = GameHistory(
+        date=date,
+        duration=duration,
+        victory=victory,
+        ancient_id=ancient_id,
+        player_count=player_count,
+        investigators=investigators,
+        despair_level=despair_level,
+        prologue_id=prologue_id,
+        rumors_id=rumors_id,
+        mysteries_solved=mysteries_solved,
+        gates_in_game=gates_in_game,
+        monsters_in_game=monsters_in_game,
+        cules_in_game=cules_in_game,
+        curses_in_game=curses_in_game,
+        blessings_in_game=blessings_in_game,
+        rumors_in_game=rumors_in_game,
+        defeat_reason_id=defeat_reason_id,
+        comment=comment,
+        photos=photos,
+    )
+    session.add(game)
+    session.commit()
+    session.close()
+    return
