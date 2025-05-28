@@ -1,7 +1,15 @@
 from telegram import InlineKeyboardMarkup, InlineKeyboardButton
 
-from constants import NAME_FORSAKEN_LORE, NAME_MOUNTAINS_OF_MADNESS, NAME_STRANGE_REMNANTS, NAME_UNDER_THE_PYRAMIDS, \
-    NAME_SIGNS_OF_CARCOSA, NAME_THE_DREAMLANDS, NAME_CITIES_IN_RUIN, NAME_MASKS_OF_NYARLATHOTEP
+from constants import (
+    NAME_FORSAKEN_LORE,
+    NAME_MOUNTAINS_OF_MADNESS,
+    NAME_STRANGE_REMNANTS,
+    NAME_UNDER_THE_PYRAMIDS,
+    NAME_SIGNS_OF_CARCOSA,
+    NAME_THE_DREAMLANDS,
+    NAME_CITIES_IN_RUIN,
+    NAME_MASKS_OF_NYARLATHOTEP,
+)
 from db import check_expansion
 from logger import LOGGER
 
@@ -10,36 +18,58 @@ def create_expansions_buttons(user_id):
     LOGGER.info(f"Создание кнопок для пользователя {user_id}")
     buttons = []
     param = "OFF"
-    if check_expansion(user_id, 'forsaken_lore'):
+    if check_expansion(user_id, "forsaken_lore"):
         param = "ON"
-    buttons.append([InlineKeyboardButton(f"[{param}]: {NAME_FORSAKEN_LORE}", callback_data="expansion_forsaken_lore")])
+    buttons.append([InlineKeyboardButton(f"[{param}]: {NAME_FORSAKEN_LORE}", callback_data="expansion_forsaken_lore")]
+    )
     param = "OFF"
-    if check_expansion(user_id, 'mountains_of_madness'):
+    if check_expansion(user_id, "mountains_of_madness"):
         param = "ON"
-    buttons.append([InlineKeyboardButton(f"[{param}]: {NAME_MOUNTAINS_OF_MADNESS}", callback_data="expansion_mountains_of_madness")])
+    buttons.append(
+        [
+            InlineKeyboardButton(
+                f"[{param}]: {NAME_MOUNTAINS_OF_MADNESS}", callback_data="expansion_mountains_of_madness"
+            )
+        ]
+    )
     param = "OFF"
-    if check_expansion(user_id, 'strange_remnants'):
+    if check_expansion(user_id, "strange_remnants"):
         param = "ON"
-    buttons.append([InlineKeyboardButton(f"[{param}]: {NAME_STRANGE_REMNANTS}", callback_data="expansion_strange_remnants")])
+    buttons.append(
+        [InlineKeyboardButton(f"[{param}]: {NAME_STRANGE_REMNANTS}", callback_data="expansion_strange_remnants")]
+    )
     param = "OFF"
-    if check_expansion(user_id, 'under_the_pyramids'):
+    if check_expansion(user_id, "under_the_pyramids"):
         param = "ON"
-    buttons.append([InlineKeyboardButton(f"[{param}]: {NAME_UNDER_THE_PYRAMIDS}", callback_data="expansion_under_the_pyramids")])
+    buttons.append(
+        [InlineKeyboardButton(f"[{param}]: {NAME_UNDER_THE_PYRAMIDS}", callback_data="expansion_under_the_pyramids")]
+    )
     param = "OFF"
-    if check_expansion(user_id, 'signs_of_carcosa'):
+    if check_expansion(user_id, "signs_of_carcosa"):
         param = "ON"
-    buttons.append([InlineKeyboardButton(f"[{param}]: {NAME_SIGNS_OF_CARCOSA}", callback_data="expansion_signs_of_carcosa")])
+    buttons.append(
+        [InlineKeyboardButton(f"[{param}]: {NAME_SIGNS_OF_CARCOSA}", callback_data="expansion_signs_of_carcosa")]
+    )
     param = "OFF"
-    if check_expansion(user_id, 'the_dreamlands'):
+    if check_expansion(user_id, "the_dreamlands"):
         param = "ON"
-    buttons.append([InlineKeyboardButton(f"[{param}]: {NAME_THE_DREAMLANDS}", callback_data="expansion_the_dreamlands")])
+    buttons.append(
+        [InlineKeyboardButton(f"[{param}]: {NAME_THE_DREAMLANDS}", callback_data="expansion_the_dreamlands")]
+    )
     param = "OFF"
-    if check_expansion(user_id, 'cities_in_ruin'):
+    if check_expansion(user_id, "cities_in_ruin"):
         param = "ON"
-    buttons.append([InlineKeyboardButton(f"[{param}]: {NAME_CITIES_IN_RUIN}", callback_data="expansion_cities_in_ruin")])
+    buttons.append(
+        [InlineKeyboardButton(f"[{param}]: {NAME_CITIES_IN_RUIN}", callback_data="expansion_cities_in_ruin")]
+    )
     param = "OFF"
-    if check_expansion(user_id, 'masks_of_nyarlathotep'):
+    if check_expansion(user_id, "masks_of_nyarlathotep"):
         param = "ON"
-    buttons.append([InlineKeyboardButton(f"[{param}]: {NAME_MASKS_OF_NYARLATHOTEP}", callback_data="expansion_masks_of_nyarlathotep")])
+    buttons.append(
+        [
+            InlineKeyboardButton(
+                f"[{param}]: {NAME_MASKS_OF_NYARLATHOTEP}", callback_data="expansion_masks_of_nyarlathotep")
+        ]
+    )
     buttons.append([InlineKeyboardButton("Назад", callback_data="menu")])
     return InlineKeyboardMarkup(buttons)
